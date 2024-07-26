@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Quiz Buzzer</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <h1>Admin Page</h1>
+    <div id="roomDetails" style="display:none;">
+        <p>Room: <span id="roomNameDisplay"></span></p>
+        <p>Room Code: <span id="roomCodeDisplay"></span></p>
+        <p>State: <span id="roomStateDisplay">Ready</span></p>
+        <div>
+            <label for="teamName">Team Name: </label>
+            <input type="text" id="teamName">
+            <button id="addTeam">Add Team</button>
+        </div>
+        <p>Teams:</p>
+        <ul id="teamsList"></ul>
+        <p>Participants:</p>
+        <ul id="participantsList"></ul>
+        <p>Buzzer Results:</p>
+        <ul id="buzzerResultsList"></ul>
+        <button id="startGame">Start Game</button>
+        <button id="endGame">End Game</button>
+        <button id="resetGame">Reset Game</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

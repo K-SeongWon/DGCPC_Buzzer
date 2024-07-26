@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player - Quiz Buzzer</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <h1>Player Page</h1>
+    <div id="playerDetails" style="display:none;">
+        <p>Name: <input type="text" id="playerName"></p>
+        <p>Team: 
+            <select id="playerTeam">
+                <!-- Teams will be populated here -->
+            </select>
+        </p>
+        <button id="joinTeam">Join Team</button>
+    </div>
+    <div id="gameDetails" style="display:none;">
+        <p>Player: <span id="playerNameDisplay" class="player-name"></span></p>
+        <p>Team: <span id="playerTeamDisplay" class="player-team"></span></p>
+        <p>Status: <span id="roomStateDisplay"></span></p>
+        <button id="buzzer" style="display:none;">Buzz</button>
+        <p id="buzzTime" style="display:none;"></p>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/player.js"></script>
+</body>
+</html>

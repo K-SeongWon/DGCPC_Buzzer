@@ -1,0 +1,39 @@
+{
+  "admin": {
+    "username": "admin",
+    "password": "dgcpc1985"
+  },
+  "screen": {
+    "username": "screen",
+    "password": "screen"
+  },
+  "rooms": {
+    "7EO6J": {
+      "name": "성경퀴즈대회 테스트",
+      "code": "7EO6J",
+      "state": "Ready",
+      "players": {
+        "::ffff:218.48.164.139": {
+          "name": "김성원",
+          "team": "2구역"
+        }
+      },
+      "teams": [
+        "1구역",
+        "2구역",
+        "3구역"
+      ],
+      "buzzerResults": [],
+      "buzzerStartTime": null
+    },
+    "16DOZ": {
+      "name": "성경퀴즈대회",
+      "code": "16DOZ",
+      "state": "Ready",
+      "players": {},
+      "teams": [],
+      "buzzerResults": [],
+      "buzzerStartTime": null
+    }
+  }
+}

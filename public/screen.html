@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen - Quiz Buzzer</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <h1>Screen Page</h1>
+    <div id="screenDetails" style="display:none;">
+        <p>Room: <span id="roomNameScreen"></span></p>
+        <p>Room Code: <span id="roomCodeScreen"></span></p>
+        <p>Status: <span id="roomStateDisplay"></span></p>
+        <p>Participants:</p>
+        <ul id="screenParticipantsList"></ul>
+        <p>Results:</p>
+        <ul id="resultsList"></ul>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/screen.js"></script>
+</body>
+</html>

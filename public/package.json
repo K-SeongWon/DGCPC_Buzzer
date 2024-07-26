@@ -1,0 +1,15 @@
+{
+  "name": "quiz-buzzer-app",
+  "version": "1.0.0",
+  "description": "Online quiz buzzer app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ip": "^2.0.1",
+    "socket.io": "^4.1.3",
+    "uuid": "^10.0.0"
+  }
+}
