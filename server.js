@@ -178,7 +178,7 @@ io.on('connection', (socket) => {
             const timeElapsed = ((buzzerPressTime - data.rooms[roomCode].buzzerStartTime) / 1000).toFixed(5);
             data.rooms[roomCode].buzzerResults.push({ playerName, team: data.rooms[roomCode].players[playerName].team, time: timeElapsed });
             io.to(roomCode).emit('buzzerResult', data.rooms[roomCode].buzzerResults);
-            io.to(roomCode).emit('buzzTime', { playerName, time: timeElapsed });
+            io.to(roomCode).emit('buzzTime', { playerName, time: timeElapsed }); // 다시 추가된 부분
             saveData();
         }
     });

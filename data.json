@@ -8,9 +8,9 @@
     "password": "screen"
   },
   "rooms": {
-    "FTVSP": {
+    "AO2EG": {
       "name": "test",
-      "code": "FTVSP",
+      "code": "AO2EG",
       "state": "Ready",
       "players": {
         "admin": {
@@ -24,8 +24,7 @@
       },
       "teams": [
         "1",
-        "2",
-        "3"
+        "2"
       ],
       "buzzerResults": [],
       "buzzerStartTime": null

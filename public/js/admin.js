@@ -79,13 +79,6 @@ socket.on('buzzerResult', (results) => {
     });
 });
 
-socket.on('buzzTime', ({ playerName, time }) => {
-    const resultsList = document.getElementById('buzzerResultsList');
-    const li = document.createElement('li');
-    li.innerHTML = `<span class="result-name">${playerName}</span>: <span class="result-time">${time} s</span>`;
-    resultsList.appendChild(li);
-});
-
 socket.on('roomDataUpdated', (roomData) => {
     document.getElementById('roomStateDisplay').innerText = roomData.state;
     document.getElementById('roomNameDisplay').innerText = roomData.name;

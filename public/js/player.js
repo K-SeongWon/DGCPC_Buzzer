@@ -102,7 +102,8 @@ document.getElementById('buzzer').addEventListener('click', () => {
 });
 
 socket.on('gameEnded', () => {
-    document.getElementById('buzzTime').style.display = 'none';
+    // 시간이 사라지지 않도록 이 부분을 주석 처리하거나 제거
+    // document.getElementById('buzzTime').style.display = 'none';
     hasBuzzed = false;
 });
 
@@ -114,8 +115,10 @@ socket.on('gameReset', () => {
 
 socket.on('buzzTime', ({ playerName, time }) => {
     const buzzTime = document.getElementById('buzzTime');
-    buzzTime.style.display = 'block';
-    buzzTime.innerText = `${playerName}: ${time} s`;
+    if (playerName === sessionStorage.getItem('username')) {
+        buzzTime.style.display = 'block';
+        buzzTime.innerText = `Your buzz time: ${time} s`;
+    }
 });
 
 socket.on('roomDataUpdated', (roomData) => {
