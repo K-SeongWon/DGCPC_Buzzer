@@ -8,12 +8,16 @@
     "password": "screen"
   },
   "rooms": {
-    "XD1FX": {
-      "name": "test",
-      "code": "XD1FX",
+    "VWBX4": {
+      "name": "1",
+      "code": "VWBX4",
       "state": "Ready",
       "players": {
-        "::1": {
+        "admin": {
+          "name": "admin",
+          "team": "Admin"
+        },
+        "김성원": {
           "name": "김성원",
           "team": "3"
         }

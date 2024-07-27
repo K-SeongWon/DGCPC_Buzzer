@@ -133,9 +133,9 @@ io.on('connection', (socket) => {
             const teamIndex = data.rooms[roomCode].teams.indexOf(teamName);
             if (teamIndex !== -1) {
                 data.rooms[roomCode].teams.splice(teamIndex, 1);
-                for (let ip in data.rooms[roomCode].players) {
-                    if (data.rooms[roomCode].players[ip].team === teamName) {
-                        data.rooms[roomCode].players[ip].team = '알수없음';
+                for (let playerName in data.rooms[roomCode].players) {
+                    if (data.rooms[roomCode].players[playerName].team === teamName) {
+                        data.rooms[roomCode].players[playerName].team = '알수없음';
                     }
                 }
                 io.to(roomCode).emit('teamDeleted', { teams: data.rooms[roomCode].teams, players: data.rooms[roomCode].players });
@@ -146,7 +146,7 @@ io.on('connection', (socket) => {
 
     socket.on('joinRoom', ({ roomCode, playerName, team }) => {
         if (data.rooms[roomCode] && data.rooms[roomCode].state === 'Ready') {
-            data.rooms[roomCode].players[clientIp] = { name: playerName, team };
+            data.rooms[roomCode].players[playerName] = { name: playerName, team };
             socket.join(roomCode);
             io.to(roomCode).emit('playerJoined', data.rooms[roomCode].players);
             io.to(roomCode).emit('roomDataUpdated', data.rooms[roomCode]);
@@ -178,7 +178,7 @@ io.on('connection', (socket) => {
         if (data.rooms[roomCode] && data.rooms[roomCode].state === 'Start') {
             const buzzerPressTime = performance.now();
             const timeElapsed = ((buzzerPressTime - data.rooms[roomCode].buzzerStartTime) / 1000).toFixed(5);
-            data.rooms[roomCode].buzzerResults.push({ playerName, team: data.rooms[roomCode].players[clientIp].team, time: timeElapsed });
+            data.rooms[roomCode].buzzerResults.push({ playerName, team: data.rooms[roomCode].players[playerName].team, time: timeElapsed });
             io.to(roomCode).emit('buzzerResult', data.rooms[roomCode].buzzerResults);
             io.to(roomCode).emit('buzzTime', { playerName, time: timeElapsed });
             saveData();
