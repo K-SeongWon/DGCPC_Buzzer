@@ -3,13 +3,6 @@ const socket = io();
 let isAdmin = false;
 let isScreen = false;
 
-document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const username = document.getElementById('adminUsername').value;
-    const password = document.getElementById('adminPassword').value;
-    socket.emit('adminLogin', { username, password });
-});
-
 socket.on('adminLoginResponse', (response) => {
     if (response.success) {
         isAdmin = response.isAdmin;
@@ -18,8 +11,6 @@ socket.on('adminLoginResponse', (response) => {
         sessionStorage.setItem('isScreen', isScreen);
         sessionStorage.setItem('username', document.getElementById('adminUsername').value);
         sessionStorage.setItem('password', document.getElementById('adminPassword').value);
-        document.getElementById('adminLoginForm').style.display = 'none';
-        document.getElementById('joinRoomPanel').style.display = 'none';
         if (isAdmin) {
             document.getElementById('adminPanel').style.display = 'block';
         }
@@ -87,8 +78,6 @@ socket.emit('getPublicRooms');
 if (sessionStorage.getItem('isAdmin') === 'true' || sessionStorage.getItem('isScreen') === 'true') {
     isAdmin = sessionStorage.getItem('isAdmin') === 'true';
     isScreen = sessionStorage.getItem('isScreen') === 'true';
-    document.getElementById('adminLoginForm').style.display = 'none';
-    document.getElementById('joinRoomPanel').style.display = 'none';
     if (isAdmin) {
         document.getElementById('adminPanel').style.display = 'block';
     }

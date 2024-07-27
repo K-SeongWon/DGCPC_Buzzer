@@ -3,39 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lobby - Quiz Buzzer</title>
+    <title>Login - Quiz Buzzer</title>
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <h1>Lobby</h1>
+    <h1>Login</h1>
     <div id="loginContainer">
-        <h2>Admin Login</h2>
-        <form id="adminLoginForm">
-            <label for="adminUsername">Username:</label>
-            <input type="text" id="adminUsername" name="adminUsername" required>
-            <label for="adminPassword">Password:</label>
-            <input type="password" id="adminPassword" name="adminPassword" required>
-            <button type="submit">Login</button>
-        </form>
-    </div>
-    <div id="adminPanel" style="display:none;">
-        <h2>Admin Panel</h2>
-        <div>
-            <label for="roomName">Room Name:</label>
-            <input type="text" id="roomName">
-            <button id="createRoom">Create Room</button>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <div id="passwordContainer" style="display:none;">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
         </div>
-    </div>
-    <div>
-        <h2>Join a Room</h2>
-        <ul id="publicRoomList"></ul>
-    </div>
-    <div id="joinRoomPanel" style="display:none;">
-        <label for="joinCode">Enter Room Code: </label>
-        <input type="text" id="joinCode">
-        <button id="joinRoomBtn">Join Room</button>
+        <button id="loginButton" style="display:none;">Login</button>
     </div>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="js/lobby.js"></script>
+    <script src="js/login.js"></script>
 </body>
 </html>
