@@ -8,9 +8,9 @@
     "password": "screen"
   },
   "rooms": {
-    "AO2EG": {
+    "XB5FA": {
       "name": "test",
-      "code": "AO2EG",
+      "code": "XB5FA",
       "state": "Ready",
       "players": {
         "admin": {
@@ -19,12 +19,13 @@
         },
         "김성원": {
           "name": "김성원",
-          "team": "2"
+          "team": "3"
         }
       },
       "teams": [
         "1",
-        "2"
+        "2",
+        "3"
       ],
       "buzzerResults": [],
       "buzzerStartTime": null

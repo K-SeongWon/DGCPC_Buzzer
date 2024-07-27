@@ -67,6 +67,7 @@ socket.on('gameEnded', (results) => {
 socket.on('gameReset', () => {
     document.getElementById('roomStateDisplay').innerText = 'Ready';
     document.getElementById('participantsList').innerHTML = '';
+    document.getElementById('buzzerResultsList').innerHTML = ''; // Buzzer Results 목록 지우기
 });
 
 socket.on('buzzerResult', (results) => {
