@@ -58,17 +58,13 @@ function deleteRoom(roomCode) {
 }
 
 function joinRoom(roomCode) {
+    const username = sessionStorage.getItem('username');
     if (isAdmin) {
         window.location.href = `/admin?code=${roomCode}`;
     } else if (isScreen) {
         window.location.href = `/screen?code=${roomCode}`;
     } else {
-        const joinCode = prompt('Please enter the room code:');
-        if (joinCode === roomCode) {
-            window.location.href = `/player?code=${roomCode}`;
-        } else {
-            alert('Incorrect room code');
-        }
+        window.location.href = `/player?code=${roomCode}&username=${username}`;
     }
 }
 

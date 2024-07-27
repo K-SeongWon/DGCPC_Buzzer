@@ -4,6 +4,7 @@ let hasBuzzed = false;
 
 const urlParams = new URLSearchParams(window.location.search);
 roomCode = urlParams.get('code');
+const playerName = sessionStorage.getItem('username');
 
 if (roomCode) {
     document.getElementById('playerDetails').style.display = 'block';
@@ -11,7 +12,6 @@ if (roomCode) {
 }
 
 document.getElementById('joinTeam').addEventListener('click', () => {
-    const playerName = document.getElementById('playerName').value;
     const playerTeam = document.getElementById('playerTeam').value;
     socket.emit('joinRoom', { roomCode, playerName, team: playerTeam });
     document.getElementById('playerDetails').style.display = 'none';
@@ -95,7 +95,6 @@ socket.on('gameStarted', () => {
 
 document.getElementById('buzzer').addEventListener('click', () => {
     if (!hasBuzzed) {
-        const playerName = document.getElementById('playerNameDisplay').innerText;
         socket.emit('buzzerPressed', { roomCode, playerName });
         document.getElementById('buzzer').style.display = 'none';
         hasBuzzed = true;

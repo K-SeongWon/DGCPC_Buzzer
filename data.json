@@ -8,14 +8,21 @@
     "password": "screen"
   },
   "rooms": {
-    "32SHQ": {
-      "name": "111",
-      "code": "32SHQ",
+    "XD1FX": {
+      "name": "test",
+      "code": "XD1FX",
       "state": "Ready",
       "players": {
-        "::1": {}
+        "::1": {
+          "name": "김성원",
+          "team": "3"
+        }
       },
-      "teams": [],
+      "teams": [
+        "1",
+        "2",
+        "3"
+      ],
       "buzzerResults": [],
       "buzzerStartTime": null
     }
