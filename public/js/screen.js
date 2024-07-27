@@ -71,10 +71,12 @@ socket.on('teamDeleted', (data) => {
 function updateParticipantsList(players) {
     const screenParticipantsList = document.getElementById('screenParticipantsList');
     screenParticipantsList.innerHTML = '';
-    for (let ip in players) {
-        const player = players[ip];
-        const li = document.createElement('li');
-        li.innerHTML = `<span class="player-name">${player.name}</span> (<span class="player-team">${player.team}</span>)`;
-        screenParticipantsList.appendChild(li);
+    for (let playerName in players) {
+        const player = players[playerName];
+        if (player.name && player.name !== 'admin' && player.name !== 'screen' && player.name !== 'undefined') {
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="player-name">${player.name}</span> (<span class="player-team">${player.team}</span>)`;
+            screenParticipantsList.appendChild(li);
+        }
     }
 }

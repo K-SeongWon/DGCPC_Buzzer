@@ -124,10 +124,12 @@ function deleteTeam(teamName) {
 function updateParticipantsList(players) {
     const participantsList = document.getElementById('participantsList');
     participantsList.innerHTML = '';
-    for (let ip in players) {
-        const player = players[ip];
-        const li = document.createElement('li');
-        li.innerHTML = `<span class="player-name">${player.name}</span> (<span class="player-team">${player.team}</span>) - IP: <span class="player-ip">${ip}</span>`;
-        participantsList.appendChild(li);
+    for (let playerName in players) {
+        const player = players[playerName];
+        if (player.name && player.name !== 'admin' && player.name !== 'screen' && player.name !== 'undefined') {
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="player-name">${player.name}</span> (<span class="player-team">${player.team}</span>)`;
+            participantsList.appendChild(li);
+        }
     }
 }

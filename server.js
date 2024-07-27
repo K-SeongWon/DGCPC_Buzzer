@@ -71,8 +71,6 @@ app.get('/screen', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    const clientIp = socket.handshake.address;
-
     socket.on('adminLogin', ({ username, password }) => {
         if ((username === data.admin.username && password === data.admin.password) ||
             (username === data.screen.username && password === data.screen.password)) {

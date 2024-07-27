@@ -8,9 +8,9 @@
     "password": "screen"
   },
   "rooms": {
-    "VWBX4": {
-      "name": "1",
-      "code": "VWBX4",
+    "FTVSP": {
+      "name": "test",
+      "code": "FTVSP",
       "state": "Ready",
       "players": {
         "admin": {
@@ -19,7 +19,7 @@
         },
         "김성원": {
           "name": "김성원",
-          "team": "3"
+          "team": "2"
         }
       },
       "teams": [
