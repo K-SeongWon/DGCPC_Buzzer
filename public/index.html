@@ -8,16 +8,26 @@
 </head>
 <body>
     <h1>Login</h1>
-    <div id="loginContainer">
-        <label for="username">Username:</label>
+    <form id="loginForm">
+        <label for="username">Name:</label>
         <input type="text" id="username" name="username" required>
-        <div id="passwordContainer" style="display:none;">
+        <div id="passwordContainer" style="display: none;">
             <label for="password">Password:</label>
             <input type="password" id="password" name="password">
         </div>
-        <button id="loginButton" style="display:none;">Login</button>
-    </div>
+        <button type="submit">Login</button>
+    </form>
     <script src="/socket.io/socket.io.js"></script>
+    <script>
+        document.getElementById('username').addEventListener('input', function() {
+            const username = this.value;
+            if (username === 'admin' || username === 'screen') {
+                document.getElementById('passwordContainer').style.display = 'block';
+            } else {
+                document.getElementById('passwordContainer').style.display = 'none';
+            }
+        });
+    </script>
     <script src="js/login.js"></script>
 </body>
 </html>

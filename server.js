@@ -82,7 +82,7 @@ io.on('connection', (socket) => {
 
     socket.on('createRoom', ({ roomName }) => {
         const roomCode = generateRoomCode();
-        data.rooms[roomCode] = { name: roomName, code: roomCode, state: 'Ready', players: {}, teams: [], buzzerResults: [], buzzerStartTime: null };
+        data.rooms[roomCode] = { name: roomName, code: roomCode, state: 'Ready', players: {}, teams: {}, buzzerResults: [], buzzerStartTime: null };
         saveData();
         io.emit('publicRoomList', Object.values(data.rooms));
     });
@@ -109,46 +109,59 @@ io.on('connection', (socket) => {
 
     socket.on('addTeam', ({ roomCode, teamName }) => {
         if (data.rooms[roomCode]) {
-            data.rooms[roomCode].teams.push(teamName);
+            const teamIndex = `team${Object.keys(data.rooms[roomCode].teams).length + 1}`;
+            data.rooms[roomCode].teams[teamIndex] = { name: teamName, score: 0 };
             io.to(roomCode).emit('teamAdded', data.rooms[roomCode].teams);
             saveData();
         }
     });
 
-    socket.on('editTeam', ({ roomCode, oldTeamName, newTeamName }) => {
-        if (data.rooms[roomCode]) {
-            const teamIndex = data.rooms[roomCode].teams.indexOf(oldTeamName);
-            if (teamIndex !== -1) {
-                data.rooms[roomCode].teams[teamIndex] = newTeamName;
-                io.to(roomCode).emit('teamUpdated', data.rooms[roomCode].teams);
-                saveData();
-            }
-        }
-    });
+    socket.on('editTeam', ({ roomCode, teamIndex, newTeamName }) => {
+        if (data.rooms[roomCode] && data.rooms[roomCode].teams[teamIndex]) {
+            data.rooms[roomCode].teams[teamIndex].name = newTeamName;
 
-    socket.on('deleteTeam', ({ roomCode, teamName }) => {
-        if (data.rooms[roomCode]) {
-            const teamIndex = data.rooms[roomCode].teams.indexOf(teamName);
-            if (teamIndex !== -1) {
-                data.rooms[roomCode].teams.splice(teamIndex, 1);
-                for (let playerName in data.rooms[roomCode].players) {
-                    if (data.rooms[roomCode].players[playerName].team === teamName) {
-                        data.rooms[roomCode].players[playerName].team = '알수없음';
-                    }
+            // 플레이어의 팀 이름도 업데이트
+            for (let playerName in data.rooms[roomCode].players) {
+                if (data.rooms[roomCode].players[playerName].team === teamIndex) {
+                    data.rooms[roomCode].players[playerName].team = teamIndex;
                 }
-                io.to(roomCode).emit('teamDeleted', { teams: data.rooms[roomCode].teams, players: data.rooms[roomCode].players });
-                saveData();
             }
+
+            io.to(roomCode).emit('teamUpdated', data.rooms[roomCode].teams);
+            io.to(roomCode).emit('roomDataUpdated', data.rooms[roomCode]);
+            saveData();
         }
     });
 
-    socket.on('joinRoom', ({ roomCode, playerName, team }) => {
+    socket.on('deleteTeam', ({ roomCode, teamIndex }) => {
+        if (data.rooms[roomCode] && data.rooms[roomCode].teams[teamIndex]) {
+            delete data.rooms[roomCode].teams[teamIndex];
+            
+            // 팀이 삭제되면 플레이어의 팀을 'unknown'으로 설정
+            for (let playerName in data.rooms[roomCode].players) {
+                if (data.rooms[roomCode].players[playerName].team === teamIndex) {
+                    data.rooms[roomCode].players[playerName].team = 'unknown';
+                }
+            }
+            
+            io.to(roomCode).emit('teamDeleted', { teams: data.rooms[roomCode].teams, players: data.rooms[roomCode].players });
+            io.to(roomCode).emit('roomDataUpdated', data.rooms[roomCode]);
+            saveData();
+        }
+    });
+
+    socket.on('joinRoom', ({ roomCode, playerName, teamIndex }) => {
         if (data.rooms[roomCode] && data.rooms[roomCode].state === 'Ready') {
-            data.rooms[roomCode].players[playerName] = { name: playerName, team };
+            data.rooms[roomCode].players[playerName] = { name: playerName, team: teamIndex };
             socket.join(roomCode);
+            saveData(); // 플레이어가 방에 참가한 후 즉시 저장
             io.to(roomCode).emit('playerJoined', data.rooms[roomCode].players);
             io.to(roomCode).emit('roomDataUpdated', data.rooms[roomCode]);
-            socket.emit('playerData', { playerName, team });
+            if (data.rooms[roomCode].teams[teamIndex]) {
+                socket.emit('playerData', { playerName, team: data.rooms[roomCode].teams[teamIndex].name });
+            } else {
+                socket.emit('playerData', { playerName, team: 'Unknown' });
+            }
         } else {
             socket.emit('error', 'Room not found or not in Ready state');
         }
@@ -174,12 +187,15 @@ io.on('connection', (socket) => {
 
     socket.on('buzzerPressed', ({ roomCode, playerName }) => {
         if (data.rooms[roomCode] && data.rooms[roomCode].state === 'Start') {
-            const buzzerPressTime = performance.now();
-            const timeElapsed = ((buzzerPressTime - data.rooms[roomCode].buzzerStartTime) / 1000).toFixed(5);
-            data.rooms[roomCode].buzzerResults.push({ playerName, team: data.rooms[roomCode].players[playerName].team, time: timeElapsed });
-            io.to(roomCode).emit('buzzerResult', data.rooms[roomCode].buzzerResults);
-            io.to(roomCode).emit('buzzTime', { playerName, time: timeElapsed }); // 다시 추가된 부분
-            saveData();
+            const player = data.rooms[roomCode].players[playerName];
+            if (player) {
+                const buzzerPressTime = performance.now();
+                const timeElapsed = ((buzzerPressTime - data.rooms[roomCode].buzzerStartTime) / 1000).toFixed(5);
+                data.rooms[roomCode].buzzerResults.push({ playerName, team: data.rooms[roomCode].teams[player.team].name, time: timeElapsed });
+                io.to(roomCode).emit('buzzerResult', data.rooms[roomCode].buzzerResults);
+                io.to(roomCode).emit('buzzTime', { playerName, time: timeElapsed });
+                saveData();
+            }
         }
     });
 

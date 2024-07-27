@@ -53,7 +53,7 @@ socket.on('gameStarting', () => {
 socket.on('roomDataUpdated', (roomData) => {
     document.getElementById('roomNameScreen').innerText = roomData.name;
     document.getElementById('roomStateDisplay').innerText = roomData.state;
-    updateParticipantsList(roomData.players);
+    updateParticipantsList(roomData.players, roomData.teams);
 });
 
 socket.on('teamAdded', (teams) => {
@@ -65,18 +65,17 @@ socket.on('teamUpdated', (teams) => {
 });
 
 socket.on('teamDeleted', (data) => {
-    updateParticipantsList(data.players);
+    updateParticipantsList(data.players, data.teams);
 });
 
-function updateParticipantsList(players) {
+function updateParticipantsList(players, teams) {
     const screenParticipantsList = document.getElementById('screenParticipantsList');
     screenParticipantsList.innerHTML = '';
     for (let playerName in players) {
         const player = players[playerName];
-        if (player.name && player.name !== 'admin' && player.name !== 'screen' && player.name !== 'undefined') {
-            const li = document.createElement('li');
-            li.innerHTML = `<span class="player-name">${player.name}</span> (<span class="player-team">${player.team}</span>)`;
-            screenParticipantsList.appendChild(li);
-        }
+        const li = document.createElement('li');
+        const playerTeamName = teams[player.team].name;
+        li.innerHTML = `<span class="player-name">${player.name}</span> (<span class="player-team">${playerTeamName}</span>)`;
+        screenParticipantsList.appendChild(li);
     }
 }

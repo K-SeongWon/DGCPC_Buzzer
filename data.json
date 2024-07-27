@@ -8,25 +8,30 @@
     "password": "screen"
   },
   "rooms": {
-    "XB5FA": {
+    "Q0DIM": {
       "name": "test",
-      "code": "XB5FA",
+      "code": "Q0DIM",
       "state": "Ready",
       "players": {
         "admin": {
-          "name": "admin",
-          "team": "Admin"
+          "name": "admin"
         },
+        "undefined": {},
         "김성원": {
           "name": "김성원",
-          "team": "3"
+          "team": "team2"
         }
       },
-      "teams": [
-        "1",
-        "2",
-        "3"
-      ],
+      "teams": {
+        "team1": {
+          "name": "1",
+          "score": 0
+        },
+        "team2": {
+          "name": "2구역",
+          "score": 0
+        }
+      },
       "buzzerResults": [],
       "buzzerStartTime": null
     }

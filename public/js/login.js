@@ -1,29 +1,27 @@
 const socket = io();
 
-document.getElementById('username').addEventListener('input', (e) => {
-    const username = e.target.value;
-    document.getElementById('passwordContainer').style.display = (username === 'admin' || username === 'screen') ? 'block' : 'none';
-    document.getElementById('loginButton').style.display = 'block';
-});
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const playerName = document.getElementById('username').value;
+    sessionStorage.setItem('playerName', playerName);
 
-document.getElementById('loginButton').addEventListener('click', () => {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    if (username === 'admin' || username === 'screen') {
-        socket.emit('adminLogin', { username, password });
+    if (playerName === 'admin' || playerName === 'screen') {
+        const password = document.getElementById('password').value;
+        socket.emit('adminLogin', { username: playerName, password });
     } else {
-        sessionStorage.setItem('username', username);
         window.location.href = '/lobby.html';
     }
 });
 
 socket.on('adminLoginResponse', (response) => {
     if (response.success) {
-        sessionStorage.setItem('isAdmin', response.isAdmin);
-        sessionStorage.setItem('isScreen', !response.isAdmin);
-        sessionStorage.setItem('username', document.getElementById('username').value);
-        sessionStorage.setItem('password', document.getElementById('password').value);
-        window.location.href = '/lobby.html';
+        if (response.isAdmin) {
+            sessionStorage.setItem('isAdmin', true);
+            window.location.href = '/lobby.html';
+        } else {
+            sessionStorage.setItem('isScreen', true);
+            window.location.href = '/lobby.html';
+        }
     } else {
         alert('Invalid login credentials');
     }

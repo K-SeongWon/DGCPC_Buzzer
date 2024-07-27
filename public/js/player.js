@@ -4,7 +4,6 @@ let hasBuzzed = false;
 
 const urlParams = new URLSearchParams(window.location.search);
 roomCode = urlParams.get('code');
-const playerName = sessionStorage.getItem('username');
 
 if (roomCode) {
     document.getElementById('playerDetails').style.display = 'block';
@@ -12,13 +11,15 @@ if (roomCode) {
 }
 
 document.getElementById('joinTeam').addEventListener('click', () => {
-    const playerTeam = document.getElementById('playerTeam').value;
-    socket.emit('joinRoom', { roomCode, playerName, team: playerTeam });
+    const playerName = sessionStorage.getItem('playerName');
+    const teamIndex = document.getElementById('playerTeam').value;
+    socket.emit('joinRoom', { roomCode, playerName, teamIndex });
     document.getElementById('playerDetails').style.display = 'none';
     document.getElementById('gameDetails').style.display = 'block';
 });
 
 socket.on('playerData', (data) => {
+    socket.emit('rejoinRoom', roomCode); // 팀 업데이트 후 방 데이터 요청
     document.getElementById('playerNameDisplay').innerText = data.playerName;
     document.getElementById('playerTeamDisplay').innerText = data.team;
 });
@@ -26,48 +27,66 @@ socket.on('playerData', (data) => {
 socket.on('teamsList', (teams) => {
     const playerTeamSelect = document.getElementById('playerTeam');
     playerTeamSelect.innerHTML = '';
-    teams.forEach(team => {
+    for (let teamIndex in teams) {
+        const team = teams[teamIndex];
         const option = document.createElement('option');
-        option.value = team;
-        option.innerText = team;
+        option.value = teamIndex;
+        option.innerText = team.name;
         playerTeamSelect.appendChild(option);
-    });
+    }
+
+    // 플레이어 팀 이름 업데이트
+    const playerName = document.getElementById('playerNameDisplay').innerText;
+    const playerTeamIndex = sessionStorage.getItem('teamIndex');
+    if (playerTeamIndex && teams[playerTeamIndex]) {
+        document.getElementById('playerTeamDisplay').innerText = teams[playerTeamIndex].name;
+    }
 });
 
 socket.on('teamAdded', (teams) => {
     const playerTeamSelect = document.getElementById('playerTeam');
     playerTeamSelect.innerHTML = '';
-    teams.forEach(team => {
+    for (let teamIndex in teams) {
+        const team = teams[teamIndex];
         const option = document.createElement('option');
-        option.value = team;
-        option.innerText = team;
+        option.value = teamIndex;
+        option.innerText = team.name;
         playerTeamSelect.appendChild(option);
-    });
+    }
 });
 
 socket.on('teamUpdated', (teams) => {
     const playerTeamSelect = document.getElementById('playerTeam');
     playerTeamSelect.innerHTML = '';
-    teams.forEach(team => {
+    for (let teamIndex in teams) {
+        const team = teams[teamIndex];
         const option = document.createElement('option');
-        option.value = team;
-        option.innerText = team;
+        option.value = teamIndex;
+        option.innerText = team.name;
         playerTeamSelect.appendChild(option);
-    });
+    }
+
+    // 플레이어 팀 이름 업데이트
+    const playerName = document.getElementById('playerNameDisplay').innerText;
+    const playerTeamIndex = sessionStorage.getItem('teamIndex');
+    if (playerTeamIndex && teams[playerTeamIndex]) {
+        document.getElementById('playerTeamDisplay').innerText = teams[playerTeamIndex].name;
+    }
 });
 
 socket.on('teamDeleted', (data) => {
     const playerTeamSelect = document.getElementById('playerTeam');
     playerTeamSelect.innerHTML = '';
-    data.teams.forEach(team => {
+    for (let teamIndex in data.teams) {
+        const team = data.teams[teamIndex];
         const option = document.createElement('option');
-        option.value = team;
-        option.innerText = team;
+        option.value = teamIndex;
+        option.innerText = team.name;
         playerTeamSelect.appendChild(option);
-    });
+    }
 
     const playerNameDisplay = document.getElementById('playerNameDisplay').innerText;
-    const player = Object.values(data.players).find(p => p.name === playerNameDisplay);
+    const player = data.players[playerNameDisplay];
     if (player) {
         document.getElementById('playerTeamDisplay').innerText = player.team;
     }
@@ -95,6 +114,7 @@ socket.on('gameStarted', () => {
 
 document.getElementById('buzzer').addEventListener('click', () => {
     if (!hasBuzzed) {
+        const playerName = document.getElementById('playerNameDisplay').innerText;
         socket.emit('buzzerPressed', { roomCode, playerName });
         document.getElementById('buzzer').style.display = 'none';
         hasBuzzed = true;
@@ -102,8 +122,7 @@ document.getElementById('buzzer').addEventListener('click', () => {
 });
 
 socket.on('gameEnded', () => {
-    // 시간이 사라지지 않도록 이 부분을 주석 처리하거나 제거
-    // document.getElementById('buzzTime').style.display = 'none';
+    document.getElementById('buzzTime').style.display = 'none';
     hasBuzzed = false;
 });
 
@@ -115,12 +134,14 @@ socket.on('gameReset', () => {
 
 socket.on('buzzTime', ({ playerName, time }) => {
     const buzzTime = document.getElementById('buzzTime');
-    if (playerName === sessionStorage.getItem('username')) {
-        buzzTime.style.display = 'block';
-        buzzTime.innerText = `Your buzz time: ${time} s`;
-    }
+    buzzTime.style.display = 'block';
+    buzzTime.innerText = `${playerName}: ${time} s`;
 });
 
 socket.on('roomDataUpdated', (roomData) => {
-    document.getElementById('roomStateDisplay').innerText = roomData.state;
+    const player = roomData.players[sessionStorage.getItem('playerName')];
+    if (player) {
+        document.getElementById('roomStateDisplay').innerText = roomData.state;
+        document.getElementById('playerTeamDisplay').innerText = roomData.teams[player.team].name;
+    }
 });
